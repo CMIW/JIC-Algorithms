@@ -11,7 +11,7 @@ export class ReemplazoComponent implements OnInit {
   equipLife:number;
   equipCost:number;
   gain:number;
-  list: Array<Array<number>> = [];
+  list: Array<Array<number>>;
   optPath: Array<number[]>;
   path: Array<Array<number>>;
   listResult:Array<String>;
@@ -24,7 +24,7 @@ export class ReemplazoComponent implements OnInit {
   /*
   metodo encargado de generar la tabla que recibe los datos iniciales del problema
   numero ano | costo mantenimiento | costo de reventa
-  */
+  */ 
   createTableItems(){
     var valPlazo = document.getElementById('txtPlazo') as HTMLInputElement; // size de la tabla
     var valVida = document.getElementById('txtVidautil') as HTMLInputElement;
@@ -62,7 +62,7 @@ export class ReemplazoComponent implements OnInit {
       this.visible = false;
       for(var i = 0 ; i < this.equipLife; i++){
         let temp: Array<number> = new Array();
-        temp.push(i+1);
+        temp.push(i+1); 
         var tr = document.createElement('tr');
         for(var j = 0 ; j < 3 ; j++){
           temp.push(0);
@@ -78,12 +78,12 @@ export class ReemplazoComponent implements OnInit {
           }
           td.style.textAlign = "center;"
           td.style.border = "1 solid black;"
-          tr.appendChild(td);
+          tr.appendChild(td); 
         }
         this.list.push(temp);
-        table.appendChild(tr);
+        table.appendChild(tr);  
       }
-      table.style.visibility = "visible ";
+      table.style.visibility = "visible";
     }
     else{
       alert('Por favor, no deje espacios en blanco.');
@@ -95,6 +95,26 @@ export class ReemplazoComponent implements OnInit {
  * segun la vida util del equipo
  */
   calculateCost(){
+    var valPlazo = document.getElementById('txtPlazo') as HTMLInputElement; // size de la tabla
+    var valVida = document.getElementById('txtVidautil') as HTMLInputElement;
+    var valCosto = document.getElementById('txtCosto') as HTMLInputElement;
+    var valGanancia = document.getElementById("txtGanancia") as HTMLInputElement;
+
+    if( Number(valPlazo.value) > 0 && Number(valVida.value) > 0  && Number(valCosto.value) > 0){
+      this.deadline = Number(valPlazo.value);
+      this.equipLife = Number(valVida.value);
+      this.equipCost = Number(valCosto.value);
+      if(Number(valGanancia.value) > 0){
+        this.gain = Number(valGanancia.value);
+      }
+      else{
+        this.gain = 0;
+      }
+      console.log(this.gain);
+      sessionStorage.setItem('TableSize', String(this.equipLife));
+    }
+
+
     let dataCost: Array<number> = new Array();
     var tableData = this.getTable('tablaDatos');
     var counter:number = 1;
@@ -158,7 +178,7 @@ export class ReemplazoComponent implements OnInit {
       }
 
     }
-
+    
     paths = this.fixedPaths(paths);
     minList = this.fixedMin(minList);
     this.createPlanTable(paths,minList);
@@ -181,7 +201,7 @@ export class ReemplazoComponent implements OnInit {
         }
       }
       this.listResult.push(temp);
-
+      
     }
     sessionStorage.setItem('TableSize', String(this.listResult.length));
     var table = document.getElementById('tablaRutas') as HTMLTableElement;
@@ -192,15 +212,15 @@ export class ReemplazoComponent implements OnInit {
       td.innerHTML += String(this.listResult[i]);
       td.style.textAlign = "center;"
       td.style.border = "1 solid black;"
-      tr.appendChild(td);
-      table.appendChild(tr);
+      tr.appendChild(td); 
+      table.appendChild(tr);  
     }
     this.visible = true;
   }
 
   /**
    * metodo encargado de invertir la lista de las rutas para ser presentada en la tabla de resultado
-   * @param paths
+   * @param paths 
    */
   fixedPaths(paths){
     var limit:number = this.deadline;
@@ -221,7 +241,7 @@ export class ReemplazoComponent implements OnInit {
 
   /**
    * metodo encargado de invertir la lista de valores minimos para que queden de forma que se puedan mostrar en la tabla
-   * @param min
+   * @param min 
    */
   fixedMin(min){
     var limit:number = this.deadline;
@@ -237,8 +257,8 @@ export class ReemplazoComponent implements OnInit {
 /**
  * metodo que muestra la tabla con el plan de reemplazo calculado
  * no determina los optimos
- * @param paths
- * @param minList
+ * @param paths 
+ * @param minList 
  */
   createPlanTable(paths,minList){
     sessionStorage.setItem('TableSize', String(this.deadline));
@@ -267,9 +287,9 @@ export class ReemplazoComponent implements OnInit {
         }
         td.style.textAlign = "center;"
         td.style.border = "1 solid black;"
-        tr.appendChild(td);
+        tr.appendChild(td); 
       }
-      table.appendChild(tr);
+      table.appendChild(tr);  
     }
     table.style.visibility = "visible ";
   }
@@ -289,12 +309,12 @@ export class ReemplazoComponent implements OnInit {
     }
   }
 
-
+  
 
   /*
   funcion encargada de obtener los datos de la tabla
   y almacenarlos en un arreglo
-  */
+  */ 
   getTable(tableId){
 		var table = document.getElementById(tableId) as HTMLTableElement;
 		var data = [];
@@ -316,7 +336,7 @@ export class ReemplazoComponent implements OnInit {
 		}
 		return data;
   }
-
+  
   saveData(){
     var table = document.getElementById('tablaDatos') as HTMLTableElement;
     var data =  this.getTable('tablaDatos');
@@ -328,8 +348,8 @@ export class ReemplazoComponent implements OnInit {
       var file = "<?xml version="+'"1.0"'+" encoding="+'"UTF-8"'+"?>";
       file += "\n<reemplazo>";
       var plazo = "\n\t<plazo>"+this.deadline+"</plazo>"
-      var vidaUtil = "\n\t<vida util>"+this.equipLife+"</vida util>";
-      var costo = "\n\t<costo compra>"+this.equipCost+"</costo compra>";
+      var vidaUtil = "\n\t<vida_util>"+this.equipLife+"</vida_util>";
+      var costo = "\n\t<costo_compra>"+this.equipCost+"</costo_compra>";
       var ganancia = "\n\t<ganancia>"+this.gain+"</ganancia>";
       var format = "\n\t<modelo>";
       for(var i = 0; i < data.length; i++){
@@ -346,7 +366,14 @@ export class ReemplazoComponent implements OnInit {
   onFileSelected(event){
     var fileName: string = event.target.files[0].name;
     console.log(fileName);
+    let dead = this.deadline;
+    let equip =this.equipLife;
+    let cost1 =this.equipCost;
+    let gan = this.gain;
+      sessionStorage.setItem('TableSize', String(this.equipLife));
     if(fileName.split(".")[1] === "xml"){
+
+      
       var fileURL = URL.createObjectURL(event.target.files[0]);
   		var req = new XMLHttpRequest();
   		req.open('GET', fileURL);
@@ -355,15 +382,15 @@ export class ReemplazoComponent implements OnInit {
   		};
   		req.send();
   		req.onload = function(){
-
+        
         URL.revokeObjectURL(fileURL);
         var xmlDoc = this.responseXML;
         console.log(xmlDoc);
         var root = xmlDoc.getElementsByTagName("reemplazo");
         var deadline = +root[0].children[0].textContent;
-        var equipLife = +root[0].children[1].textContent;
-        var equipCost = +root[0].children[2].textContent;
-        var gain = Number(root[0].children[3].textContent);
+        var equipLife = +root[0].children[2].textContent;
+        var equipCost = +root[0].children[1].textContent;
+        var gain = +root[0].children[3].textContent;
         var table = document.getElementById('tablaDatos') as HTMLTableElement;
         var plazo = document.getElementById('txtPlazo') as HTMLInputElement;
         var vida = document.getElementById('txtCosto') as HTMLInputElement;
@@ -373,9 +400,21 @@ export class ReemplazoComponent implements OnInit {
         vida.value = String(equipLife);
         costo.value = String(equipCost);
         ganancia.value = String(gain);
+        equip =equipLife;
+        if( Number(plazo.value) > 0 && Number(vida.value) > 0  && Number(costo.value) > 0){
+          dead = Number(plazo.value);
+          equip = Number(vida.value);
+          cost1 = Number(costo.value);
+          if(Number(ganancia.value) > 0){
+            gan = Number(ganancia.value);
+          }
+          else{
+            gan = 0;
+          }
+        }
         for(var i =0; i< root[0].children[4].childElementCount;i++){
               let temp: Array<number> = new Array();
-             // temp.push(i+1);
+             // temp.push(i+1); 
               var tr = document.createElement('tr');
              // temp.push(0);
 
@@ -384,30 +423,33 @@ export class ReemplazoComponent implements OnInit {
               td.setAttribute('contenteditable','false');
               td.style.textAlign = "center;";
               td.style.border = "1 solid black;";
-              tr.appendChild(td);
+              tr.appendChild(td);               
+              
+              var td1 = document.createElement('td');
+              td1.innerHTML = String(root[0].children[4].children[i].children[1].textContent);
+              td1.setAttribute('contenteditable','true');
+              td1.setAttribute('onkeypress',"javascript:return isNumber(event)");
+              td1.style.textAlign = "center;";
+              td1.style.border = "1 solid black;";
+              tr.appendChild(td1); 
 
-              td = document.createElement('td');
-              td.innerHTML = String(root[0].children[4].children[i].children[1].textContent);
-              td.setAttribute('contenteditable','true');
-              td.setAttribute('onkeypress',"javascript:return isNumber(event)");
-              td.style.textAlign = "center;";
-              td.style.border = "1 solid black;";
-              tr.appendChild(td);
-
-              td = document.createElement('td');
-              td.innerHTML = String(root[0].children[4].children[i].children[2].textContent);
-              td.setAttribute('contenteditable','true');
-              td.setAttribute('onkeypress',"javascript:return isNumber(event)");
-              td.style.textAlign = "center;";
-              td.style.border = "1 solid black;";
-              tr.appendChild(td);
+              var td2 = document.createElement('td');
+              td2.innerHTML = String(root[0].children[4].children[i].children[2].textContent);
+              td2.setAttribute('contenteditable','true');
+              td2.setAttribute('onkeypress',"javascript:return isNumber(event)");
+              td2.style.textAlign = "center;";
+              td2.style.border = "1 solid black;";
+              tr.appendChild(td2); 
 
               //list.push(temp);
-              table.appendChild(tr);
+              table.appendChild(tr); 
           }
           table.style.visibility = "visible ";
+          sessionStorage.setItem('TableSize', String(equip));
         }
       };
     }
-
+ 
 }
+
+  
