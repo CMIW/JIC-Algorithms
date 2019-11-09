@@ -5,6 +5,7 @@ import { MochilaComponent } from './components/mochila/mochila.component';
 import { MainComponent } from './components/main/main.component';
 import { SeriesComponent } from './components/series/series.component';
 import { ReemplazoComponent } from './components/reemplazo/reemplazo.component';
+import { ArbolesComponent } from './components/arboles/arboles.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/main', pathMatch: 'full' },
@@ -12,7 +13,8 @@ const routes: Routes = [
   {path:'mochila',component:MochilaComponent},
   {path:'main',component:MainComponent},
   {path:'series',component:SeriesComponent},
-  {path:'reemplazo',component:ReemplazoComponent}
+  {path:'reemplazo',component:ReemplazoComponent},
+  {path:'arboles',component:ArbolesComponent}
 ];
 
 @NgModule({

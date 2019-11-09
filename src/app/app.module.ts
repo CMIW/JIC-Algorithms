@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {MatListModule} from '@angular/material/list';
+import { ArbolesComponent } from './components/arboles/arboles.component';
 
 
 
@@ -29,7 +30,8 @@ import {MatListModule} from '@angular/material/list';
     FloydComponent,
     MochilaComponent,
     SeriesComponent,
-    ReemplazoComponent
+    ReemplazoComponent,
+    ArbolesComponent
   ],
   imports: [
     BrowserModule,
